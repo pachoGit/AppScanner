@@ -22,7 +22,7 @@
         android:layout_height="59dp"
         android:layout_marginStart="90dp"
         android:layout_marginTop="175dp"
-        android:text="VOLVER A TOMAR FOTO"
+        android:text="VOLVER A ESCANEAR"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,9 +41,7 @@
         android:layout_height="72dp"
         android:layout_marginStart="74dp"
         android:layout_marginTop="365dp"
-        android:background="#4CAF50"
         android:text="ENTREGADO"
-        android:textColor="#263238"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,9 +51,7 @@
         android:layout_height="72dp"
         android:layout_marginStart="74dp"
         android:layout_marginTop="488dp"
-        android:background="#4CAF50"
         android:text="RECHAZADO"
-        android:textColor="#263238"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

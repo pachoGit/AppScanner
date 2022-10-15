@@ -1,7 +1,9 @@
 package com.example.app
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 
 class ChooseStateActivity : AppCompatActivity() {
@@ -9,11 +11,44 @@ class ChooseStateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_state)
 
-        val message = intent.getStringExtra("Hola")
-        // Capture the layout's TextView and set the string as its text
+        val content = intent.getStringExtra("content")
+        val imagePath = intent.getStringExtra("imagePath")
+
+        // Insertamos el contenido del codigo de barras en el ViewText
         val textView = findViewById<TextView>(R.id.textCodeBar).apply {
-            text = message
+            text = content
         }
+
+        val data: MutableMap<String, String?> = mutableMapOf("content" to content, "imagePath" to imagePath)
+
+        findViewById<Button>(R.id.btnDelivered).setOnClickListener {
+            data["state"] = "0"
+            goToDeliveredStateActivity(data)
+        }
+
+        findViewById<Button>(R.id.btnRefused).setOnClickListener {
+            data["state"] = "1"
+            goToRefusedStateActivity(data)
+        }
+
+        findViewById<Button>(R.id.btnTakePictureAgain).setOnClickListener { goToMainActivity() }
+    }
+
+    private fun goToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goToDeliveredStateActivity(data: MutableMap<String, String?>) {
+        val intent = Intent(this, DeliveredStateActivity::class.java).apply {
+            data.map { (key, value) ->
+                putExtra(key, value)
+            }
+        }
+        startActivity(intent)
+    }
+
+    private fun goToRefusedStateActivity(data: MutableMap<String, String?>) {
 
     }
 }

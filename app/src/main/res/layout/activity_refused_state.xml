@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RefusedStateActivity">
+
+    <Button
+        android:id="@+id/btnWrongAddress"
+        android:layout_width="177dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="436dp"
+        android:text="DIRECCION ERRATA"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="294dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="35dp"
+        android:text="EL CÓDIGO DE BARRAS ES:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textCodeBar3"
+        android:layout_width="298dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="89dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="113dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="156dp"
+        android:text="RECHAZADO"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnMoved"
+        android:layout_width="177dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="220dp"
+        android:text="SE MUDO"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnClosed"
+        android:layout_width="177dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="288dp"
+        android:text="CERRADO"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnRejected"
+        android:layout_width="177dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="364dp"
+        android:text="RECHAZADO"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
