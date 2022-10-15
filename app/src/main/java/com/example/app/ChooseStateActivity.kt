@@ -14,23 +14,26 @@ class ChooseStateActivity : AppCompatActivity() {
         val content = intent.getStringExtra("content")
         val imagePath = intent.getStringExtra("imagePath")
 
-        // Insertamos el contenido del codigo de barras en el ViewText
+        // Insertamos el contenido del codigo de barras en el TextView
         val textView = findViewById<TextView>(R.id.textCodeBar).apply {
             text = content
         }
 
         val data: MutableMap<String, String?> = mutableMapOf("content" to content, "imagePath" to imagePath)
 
+        // Accion del boton de ENTREGADO
         findViewById<Button>(R.id.btnDelivered).setOnClickListener {
             data["state"] = "0"
             goToDeliveredStateActivity(data)
         }
 
+        // Accion del boton de RECHAZADO
         findViewById<Button>(R.id.btnRefused).setOnClickListener {
             data["state"] = "1"
             goToRefusedStateActivity(data)
         }
 
+        // Accion del boton de VOLVER
         findViewById<Button>(R.id.btnTakePictureAgain).setOnClickListener { goToMainActivity() }
     }
 
@@ -49,6 +52,11 @@ class ChooseStateActivity : AppCompatActivity() {
     }
 
     private fun goToRefusedStateActivity(data: MutableMap<String, String?>) {
-
+        val intent = Intent(this, RefusedStateActivity::class.java).apply {
+            data.map { (key, value) ->
+                putExtra(key, value)
+            }
+        }
+        startActivity(intent)
     }
 }
