@@ -1,5 +1,6 @@
 package com.example.app
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -13,7 +14,7 @@ class RefusedStateActivity : AppCompatActivity() {
 
         val content = intent.getStringExtra("content")
         val imagePath = intent.getStringExtra("imagePath")
-        val state = intent.getStringExtra("state")
+        val state = "1" //intent.getStringExtra("state")
 
         val textView = findViewById<TextView>(R.id.textCodeBar3).apply {
             text = content
@@ -44,5 +45,21 @@ class RefusedStateActivity : AppCompatActivity() {
             data["mode"] = "10"
             Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
         }
+
+        // Boton de REGRESAR
+        // Solo elimino el estado seleccionado previamente
+        findViewById<Button>(R.id.btnPrevious2).setOnClickListener {
+            data.remove("state")
+            goToChooseStateActivity(data)
+        }
+    }
+
+    private fun goToChooseStateActivity(data: MutableMap<String, String?>) {
+        val intent = Intent(this, ChooseStateActivity::class.java).apply {
+            data.map { (key, value) ->
+                putExtra(key, value)
+            }
+        }
+        startActivity(intent)
     }
 }

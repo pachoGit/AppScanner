@@ -12,7 +12,7 @@
         android:layout_height="76dp"
         android:layout_marginStart="100dp"
         android:layout_marginTop="436dp"
-        android:text="DIRECCION ERRATA"
+        android:text="DIRECCION ERRADA"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

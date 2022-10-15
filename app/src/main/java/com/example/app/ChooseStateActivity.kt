@@ -23,13 +23,11 @@ class ChooseStateActivity : AppCompatActivity() {
 
         // Accion del boton de ENTREGADO
         findViewById<Button>(R.id.btnDelivered).setOnClickListener {
-            data["state"] = "0"
             goToDeliveredStateActivity(data)
         }
 
         // Accion del boton de RECHAZADO
         findViewById<Button>(R.id.btnRefused).setOnClickListener {
-            data["state"] = "1"
             goToRefusedStateActivity(data)
         }
 

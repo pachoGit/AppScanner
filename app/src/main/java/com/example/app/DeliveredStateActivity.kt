@@ -1,5 +1,6 @@
 package com.example.app
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -13,7 +14,7 @@ class DeliveredStateActivity : AppCompatActivity() {
 
         val content = intent.getStringExtra("content")
         val imagePath = intent.getStringExtra("imagePath")
-        val state = intent.getStringExtra("state")
+        val state = "0" //intent.getStringExtra("state")
 
         val textView = findViewById<TextView>(R.id.textCodeBar2).apply {
             text = content
@@ -28,11 +29,25 @@ class DeliveredStateActivity : AppCompatActivity() {
         }
 
         // Boton del modo FIRMA
-        findViewById<Button>(R.id.btnSignature). setOnClickListener {
+        findViewById<Button>(R.id.btnSignature).setOnClickListener {
             data["mode"] = "03"
             Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
         }
+
+        // Boton de REGRESAR
+        // Solo elimino el estado seleccionado previamente
+        findViewById<Button>(R.id.btnPrevious).setOnClickListener {
+            data.remove("state")
+            goToChooseStateActivity(data)
+        }
     }
 
-    //private fun showData()
+    private fun goToChooseStateActivity(data: MutableMap<String, String?>) {
+        val intent = Intent(this, ChooseStateActivity::class.java).apply {
+            data.map { (key, value) ->
+                putExtra(key, value)
+            }
+        }
+        startActivity(intent)
+    }
 }
