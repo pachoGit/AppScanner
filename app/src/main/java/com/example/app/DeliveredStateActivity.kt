@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import org.json.JSONObject
 
 class DeliveredStateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,13 +26,15 @@ class DeliveredStateActivity : AppCompatActivity() {
         // Boton del modo SELLO
         findViewById<Button>(R.id.btnStamp).setOnClickListener {
             data["mode"] = "02"
-            Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
+            val jsonData = toJsonData(data)
+            Toast.makeText(this, jsonData.toString(), Toast.LENGTH_LONG).show()
         }
 
         // Boton del modo FIRMA
         findViewById<Button>(R.id.btnSignature).setOnClickListener {
             data["mode"] = "03"
-            Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
+            val jsonData = toJsonData(data)
+            Toast.makeText(this, jsonData.toString(), Toast.LENGTH_LONG).show()
         }
 
         // Boton de REGRESAR
@@ -49,5 +52,10 @@ class DeliveredStateActivity : AppCompatActivity() {
             }
         }
         startActivity(intent)
+    }
+
+    private fun toJsonData(data: MutableMap<String, String?>): JSONObject {
+        val newData = mutableMapOf<Any?, Any?>("data" to data)
+        return JSONObject(newData)
     }
 }

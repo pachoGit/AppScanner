@@ -44,9 +44,6 @@ class MainActivity : AppCompatActivity() {
                 val data: Map<String, String> = mapOf("content" to result.contents, "imagePath" to result.barcodeImagePath)
                 goToChooseStateActivity(data)
                 //Toast.makeText(this, "El valor escaneado es: " + result.contents + result.barcodeImagePath, Toast.LENGTH_LONG).show()
-                //val image = BitmapFactory.decodeFile(result.barcodeImagePath)
-                //binding.imageView.setImageBitmap(image)
-                //goToDeliveredStateActivity()
             }
             else {
                 Toast.makeText(this, "No se logró obtener el contenido", Toast.LENGTH_LONG).show()

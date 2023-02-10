@@ -1,9 +1,11 @@
 package com.example.app
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 
 class ChooseStateActivity : AppCompatActivity() {
@@ -15,8 +17,14 @@ class ChooseStateActivity : AppCompatActivity() {
         val imagePath = intent.getStringExtra("imagePath")
 
         // Insertamos el contenido del codigo de barras en el TextView
-        val textView = findViewById<TextView>(R.id.textCodeBar).apply {
+        findViewById<TextView>(R.id.textCodeBar).apply {
             text = content
+        }
+
+        // Insertamos la imagen
+        findViewById<ImageView>(R.id.imageView).apply {
+            val image = BitmapFactory.decodeFile(imagePath)
+            setImageBitmap(image)
         }
 
         val data: MutableMap<String, String?> = mutableMapOf("content" to content, "imagePath" to imagePath)
