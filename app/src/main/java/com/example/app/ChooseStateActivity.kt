@@ -15,6 +15,7 @@ class ChooseStateActivity : AppCompatActivity() {
 
         val content = intent.getStringExtra("content")
         val imagePath = intent.getStringExtra("imagePath")
+        val phone = intent.getStringExtra("phone")
 
         // Insertamos el contenido del codigo de barras en el TextView
         findViewById<TextView>(R.id.textCodeBar).apply {
@@ -27,7 +28,7 @@ class ChooseStateActivity : AppCompatActivity() {
             setImageBitmap(image)
         }
 
-        val data: MutableMap<String, String?> = mutableMapOf("content" to content, "imagePath" to imagePath)
+        val data: MutableMap<String, String?> = mutableMapOf("content" to content, "imagePath" to imagePath, "phone" to phone)
 
         // Accion del boton de ENTREGADO
         findViewById<Button>(R.id.btnDelivered).setOnClickListener {
