@@ -41,7 +41,7 @@ class DeliveredStateActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnStamp).setOnClickListener {
             data["mode"] = "02"
             val jsonData = toJsonData(data)
-            Toast.makeText(this, jsonData.toString(), Toast.LENGTH_LONG).show()
+            //Toast.makeText(this, jsonData.toString(), Toast.LENGTH_LONG).show()
             executeQuery(data)
         }
 
@@ -49,7 +49,7 @@ class DeliveredStateActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnSignature).setOnClickListener {
             data["mode"] = "03"
             val jsonData = toJsonData(data)
-            Toast.makeText(this, jsonData.toString(), Toast.LENGTH_LONG).show()
+            //Toast.makeText(this, jsonData.toString(), Toast.LENGTH_LONG).show()
             executeQuery(data)
         }
 
@@ -102,7 +102,11 @@ class DeliveredStateActivity : AppCompatActivity() {
             )
             //Toast.makeText(this, "Se ejecutó la consulta: ", Toast.LENGTH_LONG).show()
             sql.disconnect()
-            ftp.sendImage(data["imagePath"])
+
+            ftp.connect()
+            ftp.sendImage(data["imagePath"], data["content"] + ".jpg")
+            ftp.disconnect()
+
             goToEndActivity()
         } catch (e: SQLException) {
             Toast.makeText(this, "Internal Error", Toast.LENGTH_LONG).show()

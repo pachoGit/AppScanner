@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 //Toast.makeText(this, "El valor escaneado es: " + result.contents + result.barcodeImagePath, Toast.LENGTH_LONG).show()
             }
             else {
-                Toast.makeText(this, "No se logró obtener el contenido", Toast.LENGTH_LONG).show()
+                //Toast.makeText(this, "No se logró obtener el contenido", Toast.LENGTH_LONG).show()
             }
         }
         else {

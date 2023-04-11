@@ -3,6 +3,7 @@ package com.example.app
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.StrictMode
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -32,28 +33,28 @@ class RefusedStateActivity : AppCompatActivity() {
         // Boton del modo SE MUDO
         findViewById<Button>(R.id.btnMoved).setOnClickListener {
             data["mode"] = "01"
-            Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
+            //Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
             executeQuery(data)
         }
 
         // Boton del modo CERRADO
         findViewById<Button>(R.id.btnClosed).setOnClickListener {
             data["mode"] = "04"
-            Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
+            //Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
             executeQuery(data)
         }
 
         // Boton del modo RECHAZADO
         findViewById<Button>(R.id.btnRejected).setOnClickListener {
             data["mode"] = "07"
-            Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
+            //Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
             executeQuery(data)
         }
 
         // Boton del modo DIRECCION ERRATA
         findViewById<Button>(R.id.btnWrongAddress).setOnClickListener {
             data["mode"] = "10"
-            Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
+            //Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
             executeQuery(data)
         }
 
@@ -95,7 +96,11 @@ class RefusedStateActivity : AppCompatActivity() {
             var response = sql.executeStoredProcedure(data["content"], data["state"], data["mode"], data["phone"], "")
             //Toast.makeText(this, "Se ejecutó la consulta", Toast.LENGTH_LONG).show()
             sql.disconnect()
-            ftp.sendImage(data["imagePath"])
+
+            ftp.connect()
+            ftp.sendImage(data["imagePath"], data["content"] + ".jpg")
+            ftp.disconnect()
+
             goToEndActivity()
         }
         catch (e: SQLException) {
