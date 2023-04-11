@@ -12,6 +12,8 @@ class RefusedStateActivity : AppCompatActivity() {
 
     private val sql = SQLServer()
 
+    private val ftp = FTP()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_refused_state)
@@ -63,6 +65,11 @@ class RefusedStateActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        goToMainActivity()
+        finish()
+    }
+
     private fun goToChooseStateActivity(data: MutableMap<String, String?>) {
         val intent = Intent(this, ChooseStateActivity::class.java).apply {
             data.map { (key, value) ->
@@ -86,8 +93,9 @@ class RefusedStateActivity : AppCompatActivity() {
         try {
             sql.connect()
             var response = sql.executeStoredProcedure(data["content"], data["state"], data["mode"], data["phone"], "")
-            Toast.makeText(this, "Se ejecutó la consulta", Toast.LENGTH_LONG).show()
+            //Toast.makeText(this, "Se ejecutó la consulta", Toast.LENGTH_LONG).show()
             sql.disconnect()
+            ftp.sendImage(data["imagePath"])
             goToEndActivity()
         }
         catch (e: SQLException) {

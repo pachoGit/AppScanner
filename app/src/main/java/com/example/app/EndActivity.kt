@@ -18,6 +18,11 @@ class EndActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnHome).setOnClickListener { goToMainActivity() }
     }
 
+    override fun onBackPressed() {
+        goToMainActivity()
+        finish()
+    }
+
     private fun goToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

@@ -67,6 +67,9 @@ class MainActivity : AppCompatActivity() {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
+    override fun onBackPressed() {
+        finishAffinity()
+    }
 
     private fun goToChooseStateActivity(data: Map<String, String>) {
         val intent = Intent(this, ChooseStateActivity::class.java).apply {

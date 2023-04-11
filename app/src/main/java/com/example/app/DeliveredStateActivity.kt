@@ -21,6 +21,8 @@ import java.sql.SQLException
 class DeliveredStateActivity : AppCompatActivity() {
 
     private val sql = SQLServer()
+
+    private val ftp = FTP()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_delivered_state)
@@ -59,6 +61,11 @@ class DeliveredStateActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        goToMainActivity()
+        finish()
+    }
+
     private fun goToChooseStateActivity(data: MutableMap<String, String?>) {
         val intent = Intent(this, ChooseStateActivity::class.java).apply {
             data.map { (key, value) ->
@@ -93,8 +100,9 @@ class DeliveredStateActivity : AppCompatActivity() {
                 data["phone"],
                 ""
             )
-            Toast.makeText(this, "Se ejecutó la consulta: ", Toast.LENGTH_LONG).show()
+            //Toast.makeText(this, "Se ejecutó la consulta: ", Toast.LENGTH_LONG).show()
             sql.disconnect()
+            ftp.sendImage(data["imagePath"])
             goToEndActivity()
         } catch (e: SQLException) {
             Toast.makeText(this, "Internal Error", Toast.LENGTH_LONG).show()
