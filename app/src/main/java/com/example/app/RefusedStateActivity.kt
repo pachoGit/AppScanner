@@ -104,7 +104,7 @@ class RefusedStateActivity : AppCompatActivity() {
             goToEndActivity()
         }
         catch (e: SQLException) {
-            Toast.makeText(this, "Internal Error", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Error Interno: Asegurece de tener acceso a internet", Toast.LENGTH_LONG).show()
             e.printStackTrace()
             goToMainActivity()
         }

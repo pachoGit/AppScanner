@@ -25,6 +25,7 @@ class FTP {
         catch (e: Exception) {
             println("No se logro conectar al FTP")
             e.printStackTrace()
+            throw e
         }
     }
 

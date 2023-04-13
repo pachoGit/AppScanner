@@ -30,6 +30,7 @@ class SQLServer {
         catch (e: SQLException) {
             println("Error al conectar a la base de datos :D")
             e.printStackTrace()
+            throw e
         }
     }
 
