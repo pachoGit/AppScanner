@@ -18,9 +18,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -72,6 +74,8 @@ data class FormUiState(
         val barcode: String = "",
         val uriBarcode: Uri? = null,
         val bitmapBarcode: Bitmap? = null,
+        val uriExtra: List<Uri>? = null,
+        val bitmapExtra: List<Bitmap>? = null,
 )
 
 class FormViewModel : ViewModel() {
@@ -89,6 +93,14 @@ class FormViewModel : ViewModel() {
     fun updateBitmapBarcode(bitmapBarcode: Bitmap?) {
         _uiState.value = _uiState.value.copy(bitmapBarcode = bitmapBarcode)
     }
+
+    fun updateUriExtra(uriExtra: List<Uri>?) {
+        _uiState.value = _uiState.value.copy(uriExtra = uriExtra)
+    }
+
+    fun updateBitmapExtra(bitmapExtra: List<Bitmap>?) {
+        _uiState.value = _uiState.value.copy(bitmapExtra = bitmapExtra)
+    }
 }
 
 @Composable
@@ -101,6 +113,11 @@ fun Greeting(formViewModel: FormViewModel = viewModel()) {
                     uri: Uri? ->
                 formViewModel.updateUriBarcode(uri)
             }
+
+    val multiLauncher =
+            rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.GetMultipleContents()
+            ) { uris: List<Uri>? -> formViewModel.updateUriExtra(uris) }
 
     FlowColumn(
             verticalArrangement = Arrangement.Center,
@@ -151,7 +168,30 @@ fun Greeting(formViewModel: FormViewModel = viewModel()) {
                 }
             }
         }
-        FlowColumn() {}
+
+        FlowColumn(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(16.dp),
+        ) {
+            Button(
+                    onClick = { multiLauncher.launch("image/*") },
+                    shape = RectangleShape,
+            ) { Text(text = "Seleccione extra imagenes") }
+
+            ImageList(formViewModel, formUiState)
+        }
+
+        FlowColumn(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(16.dp),
+        ) {
+            Column() {
+                Button(
+                        onClick = {},
+                        shape = RectangleShape,
+                ) { Text(text = "Enviar") }
+            }
+        }
     }
 }
 
@@ -176,4 +216,34 @@ fun MyHeader() {
             },
             contentColor = MaterialTheme.colorScheme.primary,
     ) {}
+}
+
+@Composable
+fun ImageList(formViewModel: FormViewModel, formUiState: FormUiState) {
+    val context = LocalContext.current
+
+    var listBitmap: MutableList<Bitmap>? = mutableListOf()
+    formUiState.uriExtra?.forEach {
+        if (Build.VERSION.SDK_INT < 28) {
+            var bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+            listBitmap?.add(bitmap)
+        } else {
+            val source = ImageDecoder.createSource(context.contentResolver, it)
+            var bitmap = ImageDecoder.decodeBitmap(source)
+            listBitmap?.add(bitmap)
+        }
+    }
+
+    formViewModel.updateBitmapExtra(listBitmap)
+
+    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp)) {
+        items(formUiState.bitmapExtra?.size ?: 0) { index ->
+            var image = formUiState.bitmapExtra?.get(index)
+            Image(
+                    bitmap = image!!.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp).padding(5.dp)
+            )
+        }
+    }
 }
