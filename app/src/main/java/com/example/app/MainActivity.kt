@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         loadPhoneNumber()
         binding.btnScanner.setOnClickListener { initScanner() }
+        binding.btnManual.setOnClickListener { goToManualInsert() }
     }
 
     /**
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
+
     override fun onBackPressed() {
         finishAffinity()
     }
@@ -117,5 +119,10 @@ class MainActivity : AppCompatActivity() {
             }
             else -> throw IllegalStateException("Unexpected value: $requestCode")
         }
+    }
+
+    private fun goToManualInsert() {
+        val intent = Intent(this, ManualInsertActivity::class.java)
+        startActivity(intent)
     }
 }

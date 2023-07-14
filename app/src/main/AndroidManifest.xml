@@ -23,12 +23,13 @@
         android:theme="@style/Theme.App"
         tools:targetApi="31">
         <activity
+            android:name=".ManualInsertActivity"
+            android:exported="false"
+            android:label="@string/title_activity_manual_insert"
+            android:theme="@style/Theme.App" />
+        <activity
             android:name=".EndActivity"
             android:exported="false" />
-        <activity
-            android:name=".End"
-            android:exported="false"
-            android:label="@string/title_activity_end" />
         <activity
             android:name=".RefusedStateActivity"
             android:exported="false">
