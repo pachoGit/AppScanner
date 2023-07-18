@@ -2,11 +2,17 @@ package com.example.app
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Build
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import android.net.Uri
+import android.provider.MediaStore
+import java.io.InputStream
 
 class ChooseStateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,8 +30,22 @@ class ChooseStateActivity : AppCompatActivity() {
 
         // Insertamos la imagen
         findViewById<ImageView>(R.id.imageView).apply {
+            Toast.makeText(context, "Código de barras: " + imagePath, Toast.LENGTH_SHORT).show()
             val image = BitmapFactory.decodeFile(imagePath)
-            setImageBitmap(image)
+            if (image != null) {
+                setImageBitmap(image)
+            }
+            else {
+                val uri = Uri.parse(imagePath)
+                if (Build.VERSION.SDK_INT < 28) {
+                    var bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                    setImageBitmap(bitmap)
+                } else {
+                    val source = ImageDecoder.createSource(context.contentResolver, uri)
+                    var bitmap = ImageDecoder.decodeBitmap(source)
+                    setImageBitmap(bitmap)
+                }
+            }
         }
 
         val data: MutableMap<String, String?> = mutableMapOf("content" to content, "imagePath" to imagePath, "phone" to phone)

@@ -3,12 +3,16 @@
 package com.example.app
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
+import android.widget.Toast
+import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -23,15 +27,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,6 +45,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.app.ui.theme.AppTheme
@@ -52,7 +55,6 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ManualInsertActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -60,7 +62,7 @@ class ManualInsertActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
+                        color = MaterialTheme.colors.background
                 ) {
                     MyHeader()
                     Greeting()
@@ -101,6 +103,26 @@ class FormViewModel : ViewModel() {
     fun updateBitmapExtra(bitmapExtra: List<Bitmap>?) {
         _uiState.value = _uiState.value.copy(bitmapExtra = bitmapExtra)
     }
+
+    fun onClickSend(context: Context) {
+        val data: FormUiState = _uiState.value
+        if (data.barcode == "" || data.uriBarcode == null || data.bitmapBarcode == null) {
+            Toast.makeText(context, "Por favor ingrese el código de barras y la imagen", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val dataIntent: Map<String, String> = mapOf("content" to data.barcode, "imagePath" to (data.uriBarcode.toString() ?: ""), "phone" to "")
+        this.goToChooseStateActivity(dataIntent, context)
+    }
+
+    private fun goToChooseStateActivity(data: Map<String, String>, context: Context) {
+        val intent = Intent(context, ChooseStateActivity::class.java).apply {
+            data.map { (key, value) ->
+                putExtra(key, value)
+            }
+        }
+        startActivity(context, intent, null)
+    }
+
 }
 
 @Composable
@@ -187,7 +209,7 @@ fun Greeting(formViewModel: FormViewModel = viewModel()) {
         ) {
             Column() {
                 Button(
-                        onClick = {},
+                        onClick = { formViewModel.onClickSend(context) },
                         shape = RectangleShape,
                 ) { Text(text = "Enviar") }
             }
@@ -201,20 +223,15 @@ fun GreetingPreview() {
     AppTheme { Greeting() }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyHeader() {
     Scaffold(
             topBar = {
                 TopAppBar(
                         title = { Text("NSP Courier") },
-                        colors =
-                                TopAppBarDefaults.smallTopAppBarColors(
-                                        containerColor = MaterialTheme.colorScheme.primary
-                                ),
                 )
             },
-            contentColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colors.primary,
     ) {}
 }
 
