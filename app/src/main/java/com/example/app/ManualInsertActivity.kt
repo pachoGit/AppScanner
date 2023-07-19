@@ -110,7 +110,21 @@ class FormViewModel : ViewModel() {
             Toast.makeText(context, "Por favor ingrese el código de barras y la imagen", Toast.LENGTH_SHORT).show()
             return
         }
-        val dataIntent: Map<String, String> = mapOf("content" to data.barcode, "imagePath" to (data.uriBarcode.toString() ?: ""), "phone" to "")
+
+        var extraUriString: MutableList<String> = mutableListOf()
+        // Get the names of the Uri's for send to another activity
+        if (data.uriExtra != null) {
+            data.uriExtra.forEach {
+                extraUriString.add(it.toString())
+            }
+        }
+
+        val dataIntent: Map<String, String> = mapOf(
+            "content" to data.barcode,
+            "imagePath" to data.uriBarcode.toString(),
+            "phone" to "",
+            "extra" to extraUriString.joinToString()
+        )
         this.goToChooseStateActivity(dataIntent, context)
     }
 

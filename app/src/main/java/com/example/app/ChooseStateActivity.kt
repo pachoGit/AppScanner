@@ -22,19 +22,26 @@ class ChooseStateActivity : AppCompatActivity() {
         val content = intent.getStringExtra("content")
         val imagePath = intent.getStringExtra("imagePath")
         val phone = intent.getStringExtra("phone")
+        val extraImagesPath = intent.getStringExtra("extra")
 
         // Insertamos el contenido del codigo de barras en el TextView
         findViewById<TextView>(R.id.textCodeBar).apply {
             text = content
+
+            if (extraImagesPath != null) {
+                Toast.makeText(context, "Extras: " + extraImagesPath, Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         // Insertamos la imagen
         findViewById<ImageView>(R.id.imageView).apply {
-            Toast.makeText(context, "Código de barras: " + imagePath, Toast.LENGTH_SHORT).show()
             val image = BitmapFactory.decodeFile(imagePath)
+            // If the path comes from the "start" button
             if (image != null) {
                 setImageBitmap(image)
             }
+            // If the path comes from the "manual insert" button
             else {
                 val uri = Uri.parse(imagePath)
                 if (Build.VERSION.SDK_INT < 28) {
@@ -48,7 +55,12 @@ class ChooseStateActivity : AppCompatActivity() {
             }
         }
 
-        val data: MutableMap<String, String?> = mutableMapOf("content" to content, "imagePath" to imagePath, "phone" to phone)
+        val data: MutableMap<String, String?> = mutableMapOf(
+            "content" to content,
+            "imagePath" to imagePath,
+            "phone" to phone,
+            "extra" to extraImagesPath
+        )
 
         // Accion del boton de ENTREGADO
         findViewById<Button>(R.id.btnDelivered).setOnClickListener {
