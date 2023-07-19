@@ -20,9 +20,8 @@ import java.sql.SQLException
 
 class DeliveredStateActivity : AppCompatActivity() {
 
-    private val sql = SQLServer()
+    private val queryService = QueryService()
 
-    private val ftp = FTP()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_delivered_state)
@@ -30,17 +29,24 @@ class DeliveredStateActivity : AppCompatActivity() {
         val imagePath = intent.getStringExtra("imagePath")
         val state = "0" //intent.getStringExtra("state")
         val phone = intent.getStringExtra("phone")
+        val extraImagesPath = intent.getStringExtra("extra")
 
-        val textView = findViewById<TextView>(R.id.textCodeBar2).apply {
+        findViewById<TextView>(R.id.textCodeBar2).apply {
             text = content
         }
 
-        val data = mutableMapOf<String, String?>("content" to content, "imagePath" to imagePath, "state" to state, "phone" to phone)
+        val data = mutableMapOf<String, String?>(
+            "content" to content,
+            "imagePath" to imagePath,
+            "state" to state,
+            "phone" to phone,
+            "extra" to extraImagesPath
+        )
 
         // Boton del modo SELLO
         findViewById<Button>(R.id.btnStamp).setOnClickListener {
             data["mode"] = "02"
-            val jsonData = toJsonData(data)
+            // val jsonData = toJsonData(data)
             //Toast.makeText(this, jsonData.toString(), Toast.LENGTH_LONG).show()
             executeQuery(data)
         }
@@ -48,7 +54,7 @@ class DeliveredStateActivity : AppCompatActivity() {
         // Boton del modo FIRMA
         findViewById<Button>(R.id.btnSignature).setOnClickListener {
             data["mode"] = "03"
-            val jsonData = toJsonData(data)
+            // val jsonData = toJsonData(data)
             //Toast.makeText(this, jsonData.toString(), Toast.LENGTH_LONG).show()
             executeQuery(data)
         }
@@ -92,23 +98,9 @@ class DeliveredStateActivity : AppCompatActivity() {
 
     private fun executeQuery(data: MutableMap<String, String?>) {
         try {
-            sql.connect()
-            var response = sql.executeStoredProcedure(
-                data["content"],
-                data["state"],
-                data["mode"],
-                data["phone"],
-                ""
-            )
-            //Toast.makeText(this, "Se ejecutó la consulta: ", Toast.LENGTH_LONG).show()
-            sql.disconnect()
-
-            ftp.connect()
-            ftp.sendImage(data["imagePath"], data["content"] + ".jpg")
-            ftp.disconnect()
-
+            queryService.executeQuery(data)
             goToEndActivity()
-        } catch (e: SQLException) {
+        } catch(e: Exception) {
             Toast.makeText(this, "Error Interno: Asegurece de tener acceso a internet", Toast.LENGTH_LONG).show()
             e.printStackTrace()
             goToMainActivity()

@@ -11,9 +11,7 @@ import java.sql.SQLException
 
 class RefusedStateActivity : AppCompatActivity() {
 
-    private val sql = SQLServer()
-
-    private val ftp = FTP()
+    private val queryService = QueryService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,12 +21,19 @@ class RefusedStateActivity : AppCompatActivity() {
         val imagePath = intent.getStringExtra("imagePath")
         val state = "1" //intent.getStringExtra("state")
         val phone = intent.getStringExtra("phone")
+        val extraImagesPath = intent.getStringExtra("extra")
 
-        val textView = findViewById<TextView>(R.id.textCodeBar3).apply {
+        findViewById<TextView>(R.id.textCodeBar3).apply {
             text = content
         }
 
-        val data = mutableMapOf<String, String?>("content" to content, "imagePath" to imagePath, "state" to state, "phone" to phone)
+        val data = mutableMapOf<String, String?>(
+            "content" to content,
+            "imagePath" to imagePath,
+            "state" to state,
+            "phone" to phone,
+            "extra" to extraImagesPath
+        )
 
         // Boton del modo SE MUDO
         findViewById<Button>(R.id.btnMoved).setOnClickListener {
@@ -92,18 +97,9 @@ class RefusedStateActivity : AppCompatActivity() {
 
     private fun executeQuery(data: MutableMap<String, String?>) {
         try {
-            sql.connect()
-            var response = sql.executeStoredProcedure(data["content"], data["state"], data["mode"], data["phone"], "")
-            //Toast.makeText(this, "Se ejecutó la consulta", Toast.LENGTH_LONG).show()
-            sql.disconnect()
-
-            ftp.connect()
-            ftp.sendImage(data["imagePath"], data["content"] + ".jpg")
-            ftp.disconnect()
-
+            queryService.executeQuery(data)
             goToEndActivity()
-        }
-        catch (e: SQLException) {
+        } catch(e: Exception) {
             Toast.makeText(this, "Error Interno: Asegurece de tener acceso a internet", Toast.LENGTH_LONG).show()
             e.printStackTrace()
             goToMainActivity()
