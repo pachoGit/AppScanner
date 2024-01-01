@@ -4,17 +4,26 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import android.os.Bundle
 import android.os.Build
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.LinearLayout
 import android.net.Uri
 import android.provider.MediaStore
 import java.io.InputStream
 
 class ChooseStateActivity : AppCompatActivity() {
+
+    private lateinit var imageContainer: LinearLayout // Contenedor de imágenes
+
+    private var selectedImages = mutableListOf<Uri>() // Lista de imágenes seleccionadas
+
+    private var data = mutableMapOf<String, String?>();
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_state)
@@ -24,14 +33,10 @@ class ChooseStateActivity : AppCompatActivity() {
         val phone = intent.getStringExtra("phone")
         val extraImagesPath = intent.getStringExtra("extra")
 
+
         // Insertamos el contenido del codigo de barras en el TextView
         findViewById<TextView>(R.id.textCodeBar).apply {
             text = content
-
-            if (extraImagesPath != null) {
-                Toast.makeText(context, "Extras: " + extraImagesPath, Toast.LENGTH_SHORT).show()
-            }
-
         }
 
         // Insertamos la imagen
@@ -55,12 +60,29 @@ class ChooseStateActivity : AppCompatActivity() {
             }
         }
 
-        val data: MutableMap<String, String?> = mutableMapOf(
+        data = mutableMapOf(
             "content" to content,
             "imagePath" to imagePath,
             "phone" to phone,
             "extra" to extraImagesPath
         )
+
+        // Busca las vistas por su ID
+        imageContainer = findViewById(R.id.imageContainer)
+
+        // Insertamos las imagenes que vienen de la otra vista, si es que existen
+        val extra = extraImagesPath?.split(", ")
+        if (extra != null) {
+            val a = extra.map  { Uri.parse(it) }
+            selectedImages = a.toMutableList()
+            displaySelectedImages()
+        }
+
+
+        findViewById<Button>(R.id.btnAddExtra).setOnClickListener {
+            openFilePicker.launch("image/*")
+        }
+
 
         // Accion del boton de ENTREGADO
         findViewById<Button>(R.id.btnDelivered).setOnClickListener {
@@ -80,6 +102,35 @@ class ChooseStateActivity : AppCompatActivity() {
         goToMainActivity()
         finish()
     }
+
+
+    // Callback para manejar la selección de imágenes desde el gestor de archivos
+    private val openFilePicker =
+        registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris: List<Uri>? ->
+            uris?.let {
+                selectedImages.clear()
+                selectedImages.addAll(uris)
+                displaySelectedImages()
+                data["extra"] = selectedImages.joinToString() { it.toString() }
+            }
+        }
+
+    // Método para mostrar las imágenes seleccionadas en el HorizontalScrollView
+    private fun displaySelectedImages() {
+        imageContainer.removeAllViews() // Borra las vistas previas
+
+        for (imageUri in selectedImages) {
+            val imageView = ImageView(this)
+            imageView.setImageURI(imageUri)
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            imageView.layoutParams = params
+            imageContainer.addView(imageView)
+        }
+    }
+
     private fun goToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -102,4 +153,6 @@ class ChooseStateActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
+
+
 }

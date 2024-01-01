@@ -237,6 +237,7 @@ fun GreetingPreview() {
     AppTheme { Greeting() }
 }
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MyHeader() {
     Scaffold(

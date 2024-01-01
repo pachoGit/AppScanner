@@ -98,7 +98,7 @@ class DeliveredStateActivity : AppCompatActivity() {
 
     private fun executeQuery(data: MutableMap<String, String?>) {
         try {
-            queryService.executeQuery(data)
+            queryService.executeQuery(data, this)
             goToEndActivity()
         } catch(e: Exception) {
             Toast.makeText(this, "Error Interno: Asegurece de tener acceso a internet", Toast.LENGTH_LONG).show()

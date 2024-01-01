@@ -1,6 +1,7 @@
 package com.example.app
 
 import android.database.SQLException
+import android.content.Context
 
 class QueryService {
 
@@ -15,7 +16,7 @@ class QueryService {
 
     }
 
-    public fun executeQuery(data: MutableMap<String, String?>) {
+    public fun executeQuery(data: MutableMap<String, String?>, context: Context) {
         try {
             sql.connect()
             sql.executeStoredProcedure(
@@ -28,14 +29,14 @@ class QueryService {
             sql.disconnect()
             ftp.connect()
             // Send the principal imagen
-            ftp.sendImage(data["imagePath"], data["content"] + ".jpg")
+            ftp.sendImage(data["imagePath"], data["content"] + ".jpg", context)
             // Send the extra images
             val extraImages = data["extra"]
             var index = 0
             if (extraImages != null) {
                 val extraImagesPath = extraImages.split(",").toList()
                 extraImagesPath.forEach {
-                    ftp.sendImage(it, data["content"] + listId[index++] + ".jpg")
+                    ftp.sendImage(it, data["content"] + listId[index++] + ".jpg", context)
                 }
             }
 
