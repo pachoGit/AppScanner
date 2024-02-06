@@ -1,14 +1,12 @@
 package com.example.app
 
+import android.content.Context
+import android.net.Uri
 import android.os.StrictMode
-import android.widget.Toast
 import it.sauronsoftware.ftp4j.FTPClient
 import java.io.File
-import java.io.FileNotFoundException
-import java.io.InputStream
 import java.io.FileOutputStream
-import android.net.Uri
-import android.content.Context
+import java.io.InputStream
 
 class FTP {
 
@@ -26,8 +24,7 @@ class FTP {
         try {
             ftpClient.connect(server)
             ftpClient.login(user, password)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             println("No se logro conectar al FTP")
             e.printStackTrace()
             throw e
@@ -44,8 +41,7 @@ class FTP {
 
             if (image.exists()) {
                 println("Si existe el archivo original")
-            }
-            else {
+            } else {
                 println("No existe el archivo original")
             }
 
@@ -59,24 +55,25 @@ class FTP {
             if (success) {
                 // This is ok when get imagen with the scanner
                 println("Se renombro correctamente")
-            }
-            else {
+            } else {
                 println("ERROR: No se renombro")
             }
 
+            println("Enviando: " + imageRename.name);
+            println("Es archivo: " + imageRename.isFile);
+
             ftpClient.upload(imageRename)
-        }
-        catch (e: Exception) {
-            println("Imagen no enviada")
+        } catch (e: Exception) {
+            println("Imagen no enviada: " + e.message)
             e.printStackTrace()
+
         }
     }
 
     fun disconnect() {
         try {
             ftpClient.disconnect(true)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             println("Error al desconectar del FTP")
             e.printStackTrace()
         }
@@ -98,21 +95,23 @@ class FTP {
     }
 
     private fun getFileFromUri(context: Context, uri: Uri): File? {
-    val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-    inputStream?.use {
-        val file = File(context.cacheDir, "temp_file") // Archivo temporal en el directorio de caché
-        FileOutputStream(file).use { output ->
-            val buffer = ByteArray(4 * 1024) // Tamaño del búfer de lectura
-            var read: Int
-            while (it.read(buffer).also { read = it } != -1) {
-                output.write(buffer, 0, read)
+        val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
+        inputStream?.use {
+            val file =
+                    File(
+                            context.cacheDir,
+                            "temp_file"
+                    ) // Archivo temporal en el directorio de caché
+            FileOutputStream(file).use { output ->
+                val buffer = ByteArray(4 * 1024) // Tamaño del búfer de lectura
+                var read: Int
+                while (it.read(buffer).also { read = it } != -1) {
+                    output.write(buffer, 0, read)
+                }
+                output.flush()
             }
-            output.flush()
+            return file
         }
-        return file
+        return null
     }
-    return null
-
-}
-
 }

@@ -33,7 +33,6 @@ class ChooseStateActivity : AppCompatActivity() {
         val phone = intent.getStringExtra("phone")
         val extraImagesPath = intent.getStringExtra("extra")
 
-
         // Insertamos el contenido del codigo de barras en el TextView
         findViewById<TextView>(R.id.textCodeBar).apply {
             text = content

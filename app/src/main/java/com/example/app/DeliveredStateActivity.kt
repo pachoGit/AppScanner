@@ -31,6 +31,9 @@ class DeliveredStateActivity : AppCompatActivity() {
         val phone = intent.getStringExtra("phone")
         val extraImagesPath = intent.getStringExtra("extra")
 
+        println("Imprimiendo los archivos en entregado")
+        println(extraImagesPath)
+
         findViewById<TextView>(R.id.textCodeBar2).apply {
             text = content
         }
@@ -98,7 +101,9 @@ class DeliveredStateActivity : AppCompatActivity() {
 
     private fun executeQuery(data: MutableMap<String, String?>) {
         try {
-            queryService.executeQuery(data, this)
+            println("Enviando de execute query")
+            println(data.toString())
+            queryService.executeQuery(data = data, context = this)
             goToEndActivity()
         } catch(e: Exception) {
             Toast.makeText(this, "Error Interno: Asegurece de tener acceso a internet", Toast.LENGTH_LONG).show()

@@ -34,7 +34,7 @@ class QueryService {
             val extraImages = data["extra"]
             var index = 0
             if (extraImages != null) {
-                val extraImagesPath = extraImages.split(",").toList()
+                val extraImagesPath = extraImages.split(", ").toList()
                 extraImagesPath.forEach {
                     ftp.sendImage(it, data["content"] + listId[index++] + ".jpg", context)
                 }
