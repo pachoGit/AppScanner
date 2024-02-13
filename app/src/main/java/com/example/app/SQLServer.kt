@@ -9,7 +9,9 @@ import java.sql.SQLException
 
 class SQLServer {
 
-    private val server: String = "190.119.170.4:1433"
+    //private val server: String = "190.119.170.4:1433"
+
+    private val server: String = "200.60.111.146:1433"
 
     private val database: String = "dataNSP"
 

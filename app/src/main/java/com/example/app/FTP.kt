@@ -10,7 +10,9 @@ import java.io.InputStream
 
 class FTP {
 
-    private val server: String = "190.119.170.4"
+    // private val server: String = "190.119.170.4"
+
+    private val server: String = "200.60.111.146"
 
     private val user: String = "Diomedes2022"
 
